@@ -46,9 +46,6 @@ abstract contract GovernorCompatibilityBravo is IGovernorTimelock, IGovernorComp
     }
 
     // ============================================== Proposal lifecycle ==============================================
-    /**
-     * @dev See {IGovernor-propose}.
-     */
     function propose(
         address[] memory targets,
         uint256[] memory values,
@@ -59,9 +56,6 @@ abstract contract GovernorCompatibilityBravo is IGovernorTimelock, IGovernorComp
         return super.propose(targets, values, calldatas, description);
     }
 
-    /**
-     * @dev See {IGovernorCompatibilityBravo-propose}.
-     */
     function propose(
         address[] memory targets,
         uint256[] memory values,
@@ -73,9 +67,6 @@ abstract contract GovernorCompatibilityBravo is IGovernorTimelock, IGovernorComp
         return propose(targets, values, _encodeCalldata(signatures, calldatas), description);
     }
 
-    /**
-     * @dev See {IGovernorCompatibilityBravo-queue}.
-     */
     function queue(uint256 proposalId) public virtual override {
         ProposalDetails storage details = _proposalDetails[proposalId];
         queue(
@@ -86,9 +77,6 @@ abstract contract GovernorCompatibilityBravo is IGovernorTimelock, IGovernorComp
         );
     }
 
-    /**
-     * @dev See {IGovernorCompatibilityBravo-execute}.
-     */
     function execute(uint256 proposalId) public payable virtual override {
         ProposalDetails storage details = _proposalDetails[proposalId];
         execute(
@@ -160,9 +148,7 @@ abstract contract GovernorCompatibilityBravo is IGovernorTimelock, IGovernorComp
     }
 
     // ==================================================== Views =====================================================
-    /**
-     * @dev See {IGovernorCompatibilityBravo-proposals}.
-     */
+
     function proposals(uint256 proposalId)
         public
         view
@@ -197,9 +183,6 @@ abstract contract GovernorCompatibilityBravo is IGovernorTimelock, IGovernorComp
         executed = status == ProposalState.Executed;
     }
 
-    /**
-     * @dev See {IGovernorCompatibilityBravo-getActions}.
-     */
     function getActions(uint256 proposalId)
         public
         view
@@ -216,24 +199,16 @@ abstract contract GovernorCompatibilityBravo is IGovernorTimelock, IGovernorComp
         return (details.targets, details.values, details.signatures, details.calldatas);
     }
 
-    /**
-     * @dev See {IGovernorCompatibilityBravo-getReceipt}.
-     */
     function getReceipt(uint256 proposalId, address voter) public view virtual override returns (Receipt memory) {
         return _proposalDetails[proposalId].receipts[voter];
     }
 
-    /**
-     * @dev See {IGovernorCompatibilityBravo-quorumVotes}.
-     */
     function quorumVotes() public view virtual override returns (uint256) {
         return quorum(block.number - 1);
     }
 
     // ==================================================== Voting ====================================================
-    /**
-     * @dev See {IGovernor-hasVoted}.
-     */
+
     function hasVoted(uint256 proposalId, address account) public view virtual override returns (bool) {
         return _proposalDetails[proposalId].receipts[account].hasVoted;
     }

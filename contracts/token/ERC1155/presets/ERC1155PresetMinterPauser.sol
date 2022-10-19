@@ -102,9 +102,6 @@ contract ERC1155PresetMinterPauser is Context, AccessControlEnumerable, ERC1155B
         _unpause();
     }
 
-    /**
-     * @dev See {IERC165-supportsInterface}.
-     */
     function supportsInterface(bytes4 interfaceId)
         public
         view

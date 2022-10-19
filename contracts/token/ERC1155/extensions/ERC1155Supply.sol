@@ -30,9 +30,6 @@ abstract contract ERC1155Supply is ERC1155 {
         return ERC1155Supply.totalSupply(id) > 0;
     }
 
-    /**
-     * @dev See {ERC1155-_beforeTokenTransfer}.
-     */
     function _beforeTokenTransfer(
         address operator,
         address from,

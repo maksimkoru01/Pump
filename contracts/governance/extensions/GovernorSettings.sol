@@ -32,23 +32,14 @@ abstract contract GovernorSettings is Governor {
         _setProposalThreshold(initialProposalThreshold);
     }
 
-    /**
-     * @dev See {IGovernor-votingDelay}.
-     */
     function votingDelay() public view virtual override returns (uint256) {
         return _votingDelay;
     }
 
-    /**
-     * @dev See {IGovernor-votingPeriod}.
-     */
     function votingPeriod() public view virtual override returns (uint256) {
         return _votingPeriod;
     }
 
-    /**
-     * @dev See {Governor-proposalThreshold}.
-     */
     function proposalThreshold() public view virtual override returns (uint256) {
         return _proposalThreshold;
     }
