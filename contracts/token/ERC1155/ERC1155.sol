@@ -420,23 +420,17 @@ abstract contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI, IER
         bytes memory data
     ) private {
         if (to.code.length > 0) {
-            try IERC1155Receiver(to).onERC1155BatchReceived(operator, from, ids, values, data) returns (
-                bytes4 response
-            ) {
-                if (response != IERC1155Receiver.onERC1155BatchReceived.selector) {
-                    // Tokens rejected
-                    revert ERC1155InvalidReceiver(to);
-                }
-            } catch (bytes memory reason) {
-                if (reason.length == 0) {
-                    // non-ERC1155Receiver implementer
-                    revert ERC1155InvalidReceiver(to);
-                } else {
-                    /// @solidity memory-safe-assembly
-                    assembly {
-                        revert(add(32, reason), mload(reason))
-                    }
-                }
+            bytes memory payload = abi.encodeCall(
+                IERC1155Receiver.onERC1155BatchReceived,
+                (operator, from, ids, amounts, data)
+            );
+            bytes memory response = Address.functionCall(
+                to,
+                payload,
+                "ERC1155: transfer to non-ERC1155Receiver implementer"
+            );
+            if (abi.decode(response, (bytes4)) != IERC1155Receiver.onERC1155BatchReceived.selector) {
+                revert("ERC1155: ERC1155Receiver rejected tokens");
             }
         }
     }

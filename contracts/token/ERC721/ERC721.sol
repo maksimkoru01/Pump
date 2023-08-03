@@ -429,18 +429,16 @@ abstract contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Er
         bytes memory data
     ) private returns (bool) {
         if (to.code.length > 0) {
-            try IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, data) returns (bytes4 retval) {
-                return retval == IERC721Receiver.onERC721Received.selector;
-            } catch (bytes memory reason) {
-                if (reason.length == 0) {
-                    revert ERC721InvalidReceiver(to);
-                } else {
-                    /// @solidity memory-safe-assembly
-                    assembly {
-                        revert(add(32, reason), mload(reason))
-                    }
-                }
-            }
+            bytes memory payload = abi.encodeCall(
+                IERC721Receiver.onERC721Received,
+                (_msgSender(), from, tokenId, data)
+            );
+            bytes memory response = Address.functionCall(
+                to,
+                payload,
+                "ERC721: transfer to non ERC721Receiver implementer"
+            );
+            return abi.decode(response, (bytes4)) == IERC721Receiver.onERC721Received.selector;
         } else {
             return true;
         }
