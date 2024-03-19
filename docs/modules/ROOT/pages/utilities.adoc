@@ -198,3 +198,28 @@ await instance.multicall([
     instance.interface.encodeFunctionData("bar")
 ]);
 ----
+
+=== Datetime
+
+xref:api:utils.adoc#Datetime[`Datetime`] util allows you to convert human readable dates and times into unix time.
+
+Consider this example demonstrating datetime:
+[source, solidity]
+----
+// contracts/Widget.sol
+// SPDX-License-Identifier: MIT
+
+import "@openzeppelin/contracts/utils/Datetime.sol";
+
+contract Widget {
+    int256 _birthday;
+
+    function setBirthday(
+        int32 _year,
+        uint8 _month,
+        uint8 _day
+    ) public {
+        _birthday = Datetime.date(_year, _month, _day);
+    }
+}
+----
